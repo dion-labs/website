@@ -26,11 +26,11 @@ npm run dev
 
 Create the production bundle with `npm run build`.
 
-## Cloudflare Pages
+## Cloudflare deployment
 
 - Build command: `npm run build`
-- Output directory: `dist`
+- Deploy command: `npx wrangler deploy`
 - Production branch: `main`
 - Root directory: `/`
 
-Connect the independent GitHub repository to Cloudflare Pages, attach `dionlabs.ai`, and verify the production build before retiring the manual upload workflow.
+The site deploys as static assets on the existing Cloudflare Worker named `landing-page`. Cloudflare Workers Builds connects that Worker to `dion-labs/website`; pushes to `main` run the build and deploy commands automatically while preserving the existing `dionlabs.ai` custom domain.
