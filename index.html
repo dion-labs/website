@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DionLabs | AI Streaming OS</title>
+    <style>
+        /* --- RESET & BASE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace; /* Fallback */
+        }
+
+        /* Import a tech-mono font */
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
+
+        body {
+            background-color: #050508; /* Almost black */
+            color: #e0e0e0;
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100vh;
+            width: 100vw;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* --- BACKGROUND ATMOSPHERE --- */
+        .bg-glow {
+            position: absolute;
+            width: 80vw;
+            height: 80vw;
+            background: radial-gradient(circle, rgba(74, 0, 224, 0.15) 0%, rgba(5, 5, 8, 0) 70%);
+            bottom: -20%;
+            left: -20%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.1));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0.3;
+        }
+
+        /* --- UI LAYOUT --- */
+        header {
+            padding: 2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 20;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: -0.05em;
+            color: #fff;
+        }
+
+        .logo span {
+            color: #00f2ff; /* Electric Cyan */
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            color: #00f2ff;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            padding: 0.4rem 0.8rem;
+            border-radius: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            background: rgba(0, 242, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .status-badge:hover {
+            background: rgba(0, 242, 255, 0.15);
+            border-color: #00f2ff;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #00f2ff;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* --- MAIN CONTENT --- */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            z-index: 20;
+            position: relative;
+        }
+
+        /* The Visual Artifact: A glowing line representing the "Stream" */
+        .visual-artifact {
+            width: 100px;
+            height: 2px;
+            background: #00f2ff;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 15px #00f2ff;
+            position: relative;
+        }
+
+        .visual-artifact::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            opacity: 0.5;
+            animation: glitch-anim 3s infinite linear alternate-reverse;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            font-weight: 400; /* Lighter weight for tech look */
+        }
+
+        .highlight {
+            color: #00f2ff; /* Cyan Highlight */
+            text-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #a0a0b0;
+            max-width: 650px;
+            margin-bottom: 3rem;
+            border-left: 2px solid #4a00e0; /* Cyber Violet border */
+            padding-left: 1.5rem;
+        }
+
+        /* --- FORM AREA --- */
+        .signup-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        input[type="email"] {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            min-width: 300px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        input[type="email"]:focus {
+            border-color: #4a00e0; /* Violet Focus */
+            box-shadow: 0 0 15px rgba(74, 0, 224, 0.3);
+        }
+
+        button {
+            background: #4a00e0; /* Deep Violet */
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            background: #00f2ff; /* Hover to Cyan */
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+        }
+
+        /* --- FEATURE GRID (OS DESKTOP) --- */
+        .feature-section {
+            margin-top: 4rem;
+            padding-top: 2rem;
+        }
+
+        .feature-section h2 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 0;
+            background: #00f2ff;
+            transition: height 0.3s ease;
+        }
+
+        .app-card:hover {
+            background: rgba(0, 242, 255, 0.05);
+            border-color: rgba(0, 242, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .app-card:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .app-card:hover::before {
+            height: 100%;
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .app-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00f2ff;
+        }
+
+        .app-status {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 2px 6px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #888;
+        }
+
+        .app-status.active {
+            color: #00f2ff;
+            background: rgba(0, 242, 255, 0.1);
+        }
+
+        .app-status.dev {
+            color: #ffaa00;
+            background: rgba(255, 170, 0, 0.1);
+        }
+
+        .app-interest-tag {
+            font-size: 0.6rem;
+            color: #ffaa00;
+            background: rgba(255, 170, 0, 0.05);
+            padding: 2px 6px;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .app-interest-tag.visible {
+            opacity: 1;
+        }
+
+        .app-card h3 {
+            font-size: 1rem;
+            color: #fff;
+            margin: 0;
+        }
+
+        .app-card p {
+            font-size: 0.8rem;
+            color: #888;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .interest-btn {
+            margin-top: auto;
+            background: transparent;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            color: #00f2ff;
+            font-size: 0.7rem;
+            padding: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .interest-btn:hover {
+            background: #00f2ff;
+            color: #000;
+        }
+
+        .interest-btn.clicked {
+            background: rgba(0, 242, 255, 0.2);
+            border-color: #00f2ff;
+            color: #fff;
+            pointer-events: none;
+        }
+
+        /* --- OSS SECTION --- */
+        .oss-section {
+            margin-top: 4rem;
+            padding-top: 2rem;
+        }
+
+        .oss-section h2 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        .oss-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .oss-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        .oss-card:hover {
+            background: rgba(74, 0, 224, 0.05);
+            border-color: rgba(74, 0, 224, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .oss-card h3 {
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .oss-card h3 span {
+            font-size: 0.7rem;
+            background: rgba(0, 242, 255, 0.1);
+            color: #00f2ff;
+            padding: 2px 6px;
+            border-radius: 2px;
+        }
+
+        .oss-card p {
+            font-size: 0.85rem;
+            color: #888;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .oss-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .oss-link {
+            font-size: 0.75rem;
+            color: #00f2ff;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .oss-link:hover {
+            border-color: #00f2ff;
+        }
+
+        /* --- DEV LOG SECTION --- */
+        .dev-log-section {
+            margin-top: 4rem;
+            padding-top: 2rem;
+        }
+
+        .dev-log-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            color: #888; /* More visible than before */
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .dev-log-content svg {
+            width: 18px;
+            height: 18px;
+            fill: #9146FF; /* Twitch Purple */
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .dev-log-link {
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .dev-log-link:hover {
+            color: #00f2ff;
+            border-color: #00f2ff;
+        }
+
+        /* --- FOOTER / META --- */
+        footer {
+            padding: 2rem 3rem;
+            display: flex;
+            gap: 2rem;
+            font-size: 0.8rem;
+            color: #555;
+            z-index: 20;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .cursor-blink {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; box-shadow: 0 0 5px #00f2ff; }
+            50% { opacity: 0.4; box-shadow: 0 0 0 #00f2ff; }
+            100% { opacity: 1; box-shadow: 0 0 5px #00f2ff; }
+        }
+
+        @keyframes glitch-anim {
+            0% { width: 10%; left: 0; }
+            50% { width: 100%; left: 0; }
+            100% { width: 10%; left: 90%; }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            header, main, footer { padding: 1.5rem; }
+            h1 { font-size: 2rem; }
+            .bg-glow { width: 150vw; height: 150vw; left: -50%; }
+            .signup-container { flex-direction: column; align-items: stretch; }
+            input[type="email"] { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+    <div class="scanline"></div>
+
+    <header>
+        <div class="logo">Dion<span>Labs</span><span class="cursor-blink">_</span></div>
+        <a href="https://signals.dionlabs.ai" class="status-badge">
+            <div class="status-dot"></div>
+            SIGNALS_FROM_THE_NOISE
+        </a>
+    </header>
+
+    <main>
+        <div class="visual-artifact"></div>
+
+        <h1>
+            The Operating System<br>
+            for <span class="highlight">the Modern Streamer.</span>
+        </h1>
+
+        <p class="subtitle">
+            Your broadcast, upgraded. Features intelligent co-hosts, automated production, and real-time vision.<br><br>
+            Stop managing chat—start directing the show.
+        </p>
+
+        <form id="signup-form" class="signup-container">
+            <input type="email" placeholder="ENTER_EMAIL_ADDRESS" required>
+            <button type="submit">[ REQUEST ACCESS ]</button>
+            <div style="font-size: 0.65rem; color: #555; width: 100%; margin-top: 0.5rem; letter-spacing: 0.1em;">
+                STATUS: ACTIVE_DEVELOPMENT // ALPHA_RECRUITMENT_PHASE
+            </div>
+        </form>
+
+        <div id="success-message" style="display: none;">
+            <p class="subtitle" style="border-left-color: #00f2ff; margin-bottom: 0;">
+                [ ACCESS_REQUEST_RECEIVED ]<br>
+                Your node has been added to the waitlist. 
+                While you wait, find <a href="https://signals.dionlabs.ai" class="dev-log-link">Signals From The Noise</a>.
+            </p>
+        </div>
+
+        <section class="dev-log-section">
+            <div class="dev-log-content">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+                <div>
+                    # Development happens live. Catch periodic build sessions and feature tests on the <a href="https://www.twitch.tv/d_precated" target="_blank" class="dev-log-link">d_precated</a> lab stream.
+                </div>
+            </div>
+        </section>
+
+        <section class="feature-section">
+            <h2>System Modules</h2>
+            <div class="app-grid">
+                <!-- Multi-Host -->
+                <div class="app-card" data-feature="multi_host" onclick="trackInterest(event, 'multi_host')">
+                    <div class="app-header">
+                        <div class="app-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <div class="app-interest-tag"><span class="emoji">👀</span> <span class="count">0</span></div>
+                            <div class="app-status active">Core</div>
+                        </div>
+                    </div>
+                    <h3>Multi-Host Core</h3>
+                    <p>Support for multiple hosts and co-hosts. Fully customizable personalities, knowledge, and prompts via Voxta.</p>
+                    <button class="interest-btn">[ LOG INTEREST ]</button>
+                </div>
+
+                <!-- Twitch Relay -->
+                <div class="app-card" data-feature="twitch_relay" onclick="trackInterest(event, 'twitch_relay')">
+                    <div class="app-header">
+                        <div class="app-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <div class="app-interest-tag"><span class="emoji">👀</span> <span class="count">0</span></div>
+                            <div class="app-status active">Stable</div>
+                        </div>
+                    </div>
+                    <h3>Twitch Chat Relay</h3>
+                    <p>Connects Twitch chat to Voxta, allowing AI characters to interact live and react to your audience in real-time.</p>
+                    <button class="interest-btn">[ LOG INTEREST ]</button>
+                </div>
+
+                <!-- Live Chat Overlay -->
+                <div class="app-card" data-feature="chat_overlay" onclick="trackInterest(event, 'chat_overlay')">
+                    <div class="app-header">
+                        <div class="app-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <div class="app-interest-tag"><span class="emoji">👀</span> <span class="count">0</span></div>
+                            <div class="app-status active">Stable</div>
+                        </div>
+                    </div>
+                    <h3>Live Chat Overlay</h3>
+                    <p>Centralized OBS browser widget combining Voxta responses and Twitch chat into a single, sleek broadcast element.</p>
+                    <button class="interest-btn">[ LOG INTEREST ]</button>
+                </div>
+
+                <!-- Game Dialogue Relay -->
+                <div class="app-card" data-feature="game_relay" onclick="trackInterest(event, 'game_relay')">
+                    <div class="app-header">
+                        <div class="app-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <div class="app-interest-tag"><span class="emoji">👀</span> <span class="count">0</span></div>
+                            <div class="app-status dev">Prototype</div>
+                        </div>
+                    </div>
+                    <h3>Game Dialogue Relay</h3>
+                    <p>OCR-based monitoring that detects in-game subtitles and relays them to Voxta for immediate AI reactions.</p>
+                    <button class="interest-btn">[ LOG INTEREST ]</button>
+                </div>
+
+                <!-- Chessboard Relay -->
+                <div class="app-card" data-feature="chess_relay" onclick="trackInterest(event, 'chess_relay')">
+                    <div class="app-header">
+                        <div class="app-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11l-8-8-8 8"/><path d="M19 21v-8M5 21v-8"/><path d="M12 21V11"/></svg>
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <div class="app-interest-tag"><span class="emoji">👀</span> <span class="count">0</span></div>
+                            <div class="app-status dev">Prototype</div>
+                        </div>
+                    </div>
+                    <h3>Chessboard Relay</h3>
+                    <p>Monitors live chess games in your browser and updates Voxta on every move for live commentary.</p>
+                    <button class="interest-btn">[ LOG INTEREST ]</button>
+                </div>
+
+                <!-- Control Center -->
+                <div class="app-card" data-feature="control_center" onclick="trackInterest(event, 'control_center')">
+                    <div class="app-header">
+                        <div class="app-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <div class="app-interest-tag"><span class="emoji">👀</span> <span class="count">0</span></div>
+                            <div class="app-status active">Core</div>
+                        </div>
+                    </div>
+                    <h3>Control Center</h3>
+                    <p>A centralized, OS-like web dashboard to manage and activate your streaming apps on the fly.</p>
+                    <button class="interest-btn">[ LOG INTEREST ]</button>
+                </div>
+
+                <!-- 2D Avatars -->
+                <div class="app-card" data-feature="2d_avatars" onclick="trackInterest(event, '2d_avatars')">
+                    <div class="app-header">
+                        <div class="app-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <div class="app-interest-tag"><span class="emoji">👀</span> <span class="count">0</span></div>
+                            <div class="app-status active">Stable</div>
+                        </div>
+                    </div>
+                    <h3>2D Avatars</h3>
+                    <p>Easily integrate Voxta avatars into OBS for the classic "user-in-a-corner" streaming experience.</p>
+                    <button class="interest-btn">[ LOG INTEREST ]</button>
+                </div>
+
+                <!-- Avatar Overlay (3D) -->
+                <div class="app-card" data-feature="3d_avatars" onclick="trackInterest(event, '3d_avatars')">
+                    <div class="app-header">
+                        <div class="app-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <div class="app-interest-tag"><span class="emoji">👀</span> <span class="count">0</span></div>
+                            <div class="app-status dev">In Dev</div>
+                        </div>
+                    </div>
+                    <h3>Avatar Overlay 3D</h3>
+                    <p>Coming Soon: Animated 3D VTuber avatars with full Voxta puppeteering and lip-sync support.</p>
+                    <button class="interest-btn">[ LOG INTEREST ]</button>
+                </div>
+
+                <!-- Custom TTS -->
+                <div class="app-card" data-feature="custom_tts" onclick="trackInterest(event, 'custom_tts')">
+                    <div class="app-header">
+                        <div class="app-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                        </div>
+                        <div style="display: flex; gap: 6px;">
+                            <div class="app-interest-tag"><span class="emoji">👀</span> <span class="count">0</span></div>
+                            <div class="app-status active">Stable</div>
+                        </div>
+                    </div>
+                    <h3>Advanced TTS</h3>
+                    <p>Enhanced audio via Google Chirp 3 HD (Cloud) or Marvis (Local) for ultra-realistic AI voices.</p>
+                    <button class="interest-btn">[ LOG INTEREST ]</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="oss-section">
+            <h2>Open Source</h2>
+            <div class="oss-grid">
+                <div class="oss-card">
+                    <h3>voxta-client <span>Python</span></h3>
+                    <p>
+                        A Python client library for interacting with the Voxta conversational AI platform via SignalR.
+                        Built for custom augmentations and external providers.
+                    </p>
+                    <div class="oss-links">
+                        <a href="https://github.com/dion-labs/voxta-client" class="oss-link" target="_blank">GitHub</a>
+                        <a href="https://voxta.dionlabs.ai/" class="oss-link" target="_blank">Documentation</a>
+                        <a href="https://pypi.org/project/voxta-client/" class="oss-link" target="_blank">PyPI</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div>&copy; 2025 DionLabs.ai</div>
+        <div>v0.0.1</div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { 
+            getFirestore, doc, setDoc, collection, addDoc, 
+            serverTimestamp, increment, getDocs, getDoc, updateDoc 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+
+        // --- FIREBASE CONFIGURATION ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBiJKGcTfN8TBehRwFOImuIkj_oxTjmR1g",
+            authDomain: "dionlabs-fe92e.firebaseapp.com",
+            projectId: "dionlabs-fe92e",
+            storageBucket: "dionlabs-fe92e.firebasestorage.app",
+            messagingSenderId: "263927058814",
+            appId: "1:263927058814:web:174e2923254557ca9a232f",
+            measurementId: "G-61ZYV30HGQ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const analytics = getAnalytics(app);
+
+        // --- LIGHTWEIGHT ERROR TRACKING ---
+        function trackError(errorType, message, source = 'window', details = {}) {
+            console.error(`[${errorType}] ${message}`, details);
+            try {
+                logEvent(analytics, 'exception', {
+                    error_type: errorType,
+                    error_message: message,
+                    error_source: source,
+                    ...details,
+                    // Track basic context
+                    page_path: window.location.pathname,
+                    viewport: `${window.innerWidth}x${window.innerHeight}`
+                });
+            } catch (e) {
+                // Silently fail if analytics is blocked
+            }
+        }
+
+        // Catch global JS errors
+        window.onerror = (message, url, line, col, error) => {
+            trackError('js_error', message, 'window.onerror', {
+                line: line,
+                column: col,
+                url: url
+            });
+            return false; // Let browser still log to console
+        };
+
+        // Catch unhandled promise rejections (Firestore/API failures)
+        window.onunhandledrejection = (event) => {
+            trackError('promise_rejection', event.reason?.message || 'Unknown promise error', 'unhandledrejection', {
+                reason: event.reason?.toString()
+            });
+        };
+
+        const signupForm = document.getElementById('signup-form');
+        const successMessage = document.getElementById('success-message');
+        const submitBtn = signupForm.querySelector('button');
+        const emailInput = signupForm.querySelector('input[type="email"]');
+
+        const STORAGE_KEY = 'dionlabs_access_requested';
+        const INTERESTS_KEY = 'dionlabs_interests';
+
+        // Initialize interests from storage
+        let interests = JSON.parse(localStorage.getItem(INTERESTS_KEY) || '[]');
+        
+        // Mark already interested buttons
+        interests.forEach(featureId => {
+            const btn = document.querySelector(`[data-feature="${featureId}"] .interest-btn`);
+            if (btn) {
+                btn.classList.add('clicked');
+                btn.innerText = '[ LOGGED ]';
+            }
+        });
+
+        // --- GLOBAL STATISTICS & REORDERING ---
+        function getInterestEmoji(count) {
+            if (count > 50) return '🔥';
+            if (count > 10) return '👍';
+            return '👀';
+        }
+
+        async function updateUIWithStats() {
+            const grid = document.querySelector('.app-grid');
+            const cards = Array.from(grid.querySelectorAll('.app-card'));
+            const statsMap = {};
+
+            try {
+                const statsSnap = await getDocs(collection(db, "feature_stats"));
+                statsSnap.forEach(doc => {
+                    statsMap[doc.id] = doc.data().count || 0;
+                });
+            } catch (e) {
+                trackError('stats_fetch_error', e.message, 'updateUIWithStats');
+            }
+
+            // Always update UI for all cards, regardless of fetch success
+            cards.forEach(card => {
+                const featureId = card.dataset.feature;
+                const count = statsMap[featureId] || 0;
+                const tag = card.querySelector('.app-interest-tag');
+                if (tag) {
+                    tag.querySelector('.count').innerText = count;
+                    tag.querySelector('.emoji').innerText = getInterestEmoji(count);
+                    tag.classList.add('visible');
+                }
+            });
+
+            // Reorder modules based on stats if we have any
+            if (Object.keys(statsMap).length > 0) {
+                cards.sort((a, b) => {
+                    const countA = statsMap[a.dataset.feature] || 0;
+                    const countB = statsMap[b.dataset.feature] || 0;
+                    return countB - countA;
+                });
+                cards.forEach(card => grid.appendChild(card));
+            }
+        }
+
+        window.trackInterest = async (event, featureId) => {
+            event.stopPropagation();
+            const card = event.currentTarget;
+            const btn = card.querySelector('.interest-btn');
+            
+            if (interests.includes(featureId)) return;
+            
+            interests.push(featureId);
+            localStorage.setItem(INTERESTS_KEY, JSON.stringify(interests));
+            
+            // UI Update
+            btn.classList.add('clicked');
+            btn.innerText = '[ LOGGING... ]';
+            
+            // Log to Analytics
+            logEvent(analytics, 'feature_interest', {
+                feature_id: featureId
+            });
+
+            try {
+                // 1. Update Global Statistics
+                const statsRef = doc(db, "feature_stats", featureId);
+                await setDoc(statsRef, { count: increment(1) }, { merge: true });
+
+                // Update UI counter & emoji immediately
+                const tag = card.querySelector('.app-interest-tag');
+                if (tag) {
+                    const countSpan = tag.querySelector('.count');
+                    const emojiSpan = tag.querySelector('.emoji');
+                    const newCount = parseInt(countSpan.innerText) + 1;
+                    countSpan.innerText = newCount;
+                    emojiSpan.innerText = getInterestEmoji(newCount);
+                    tag.classList.add('visible');
+                }
+
+                // 2. If we have email, only add a new submission
+                const email = localStorage.getItem('dionlabs_user_email');
+                if (email) {
+                    const docId = email.toLowerCase().trim();
+                    const leadRef = doc(db, "leads", docId);
+                    
+                    // Append new submission for this specific interaction
+                    await addDoc(collection(leadRef, "submissions"), {
+                        timestamp: serverTimestamp(),
+                        source: 'interest_log',
+                        feature_id: featureId,
+                        updated_interests: interests
+                    });
+                }
+            } catch (e) {
+                trackError('interest_sync_error', e.message, 'trackInterest', { feature_id: featureId });
+            }
+
+            btn.innerText = '[ LOGGED ]';
+        };
+
+        // Check if already submitted
+        if (localStorage.getItem(STORAGE_KEY)) {
+            signupForm.style.display = 'none';
+            successMessage.style.display = 'block';
+        }
+
+        // Initial Stats Load
+        updateUIWithStats();
+
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = emailInput.value;
+            
+            if (!email) return;
+
+            localStorage.setItem('dionlabs_user_email', email);
+            
+            // Visual feedback
+            submitBtn.disabled = true;
+            submitBtn.innerText = '[ SENDING... ]';
+
+            try {
+                const browserMetadata = {
+                    userAgent: navigator.userAgent,
+                    language: navigator.language,
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    screenResolution: `${window.screen.width}x${window.screen.height}`,
+                    viewportSize: `${window.innerWidth}x${window.innerHeight}`,
+                    referrer: document.referrer || 'direct',
+                    platform: navigator.platform
+                };
+
+                let locationData = {};
+                const geoPromise = fetch('https://ipapi.co/json/')
+                    .then(res => res.ok ? res.json() : {})
+                    .then(geo => {
+                        locationData = {
+                            ip: geo.ip,
+                            city: geo.city,
+                            region: geo.region,
+                            country: geo.country_name,
+                            isp: geo.org
+                        };
+                    })
+                    .catch(e => trackError('geo_fetch_error', e.message, 'signupForm.submit.geoFetch'));
+
+                const docId = email.toLowerCase().trim();
+                const leadRef = doc(db, "leads", docId);
+                
+                // 1. Save identity lead document (Bare identity)
+                // We wrap this in a sub-try/catch because with 'allow create' rules,
+                // setDoc will fail if the lead already exists.
+                try {
+                    await setDoc(leadRef, {
+                        email: docId,
+                        first_seen: serverTimestamp(),
+                        status: 'pending'
+                    }, { merge: true });
+                } catch (e) {
+                    console.log("Lead identity already exists, proceeding to submission.");
+                }
+
+                // 2. Log initial signup submission with all interests
+                await addDoc(collection(leadRef, "submissions"), {
+                    timestamp: serverTimestamp(),
+                    source: 'landing_page_signup',
+                    version: '0.0.3_stats',
+                    metadata: { 
+                        ...browserMetadata,
+                        interests: interests
+                    }
+                });
+
+                // 3. UI TRANSITION
+                signupForm.style.display = 'none';
+                successMessage.style.display = 'block';
+                localStorage.setItem(STORAGE_KEY, 'true');
+
+                // 4. Analytics
+                logEvent(analytics, 'sign_up', {
+                    interest_count: interests.length
+                });
+
+                geoPromise.then(async () => {
+                    if (Object.keys(locationData).length === 0) return;
+                    try {
+                        await addDoc(collection(leadRef, "submissions"), {
+                            timestamp: serverTimestamp(),
+                            source: 'geo_enrichment',
+                            metadata: { location: locationData }
+                        });
+                    } catch (e) {
+                        trackError('geo_save_error', e.message, 'signupForm.submit.geoPromise');
+                    }
+                });
+
+            } catch (error) {
+                trackError('signup_error', error.message, 'signupForm.submit');
+                submitBtn.innerText = '[ ERROR_RETRY ]';
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
