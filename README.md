@@ -4,9 +4,9 @@ The source for [dionlabs.ai](https://dionlabs.ai), D's personal software-lab por
 
 ## Current state
 
-This repository was initialized from the existing DionLabs streaming landing page. The live homepage still presents the original AI streaming project; it will be redesigned into a portfolio for active, incubating, paused, and open-source DionLabs projects.
+The original AI streaming landing page has been replaced by a static portfolio for active, incubating, paused, and open-source DionLabs projects. The site is built with Vite and emits fully crawlable HTML and assets to `dist/`.
 
-The original source remains in the streaming monolith until the current Cloudflare Pages deployment source is confirmed. This avoids disrupting the live site during the repository split.
+The previous homepage was manually uploaded. Its source remains in the streaming monolith as historical context while this repository becomes the canonical source for `dionlabs.ai`.
 
 ## Intended content
 
@@ -17,10 +17,20 @@ The original source remains in the streaming monolith until the current Cloudfla
 - Open-source projects and repositories
 - A paused streaming-project card with a call for a streamer or collaborator
 
-## Deployment work remaining
+## Local development
 
-1. Confirm how the current `dionlabs.ai` Cloudflare Pages project is deployed.
-2. Create and connect the independent GitHub repository.
-3. Replace the imported landing page with the portfolio design.
-4. Verify the custom domain, redirects, metadata, robots policy, and sitemap.
-5. Remove the legacy monolith copy only after the new deployment is live and verified.
+```bash
+npm install
+npm run dev
+```
+
+Create the production bundle with `npm run build`.
+
+## Cloudflare Pages
+
+- Build command: `npm run build`
+- Output directory: `dist`
+- Production branch: `main`
+- Root directory: `/`
+
+Connect the independent GitHub repository to Cloudflare Pages, attach `dionlabs.ai`, and verify the production build before retiring the manual upload workflow.
