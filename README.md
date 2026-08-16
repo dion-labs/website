@@ -11,7 +11,7 @@ The previous homepage was manually uploaded. Its source remains in the streaming
 ## Intended content
 
 - A short introduction to D and DionLabs
-- Featured active projects, beginning with PageEcho
+- Featured active projects, beginning with FolioDuet (formerly PageEcho)
 - Clear project lifecycle labels
 - Signals as the shared engineering journal
 - Open-source projects and repositories
