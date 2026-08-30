@@ -229,6 +229,7 @@ h1 span {
 }
 
 .radar-item.is-paused em { color: var(--orange); }
+.radar-item.is-experimental em { color: var(--acid); }
 
 .section-label,
 .card-meta,
@@ -497,6 +498,78 @@ h3 {
 .deck-card .card-kicker { color: var(--acid); }
 .deck-card .card-meta span:last-child { color: var(--acid); }
 .deck-card .card-link:hover { border-color: var(--acid); color: var(--acid); }
+
+.pbot-card {
+  min-height: 620px;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(330px, 0.72fr) minmax(520px, 1.28fr);
+  gap: clamp(42px, 6vw, 90px);
+  overflow: hidden;
+  scroll-margin-top: 24px;
+  background:
+    radial-gradient(circle at 82% 36%, rgba(224, 75, 63, 0.14), transparent 28rem),
+    linear-gradient(125deg, rgba(234, 191, 69, 0.035), transparent 48%),
+    rgba(12, 16, 19, 0.94);
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+.pbot-card:hover,
+.pbot-card:focus-visible {
+  border-color: rgba(224, 75, 63, 0.48);
+  transform: translateY(-4px);
+}
+
+.pbot-card-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.pbot-card .card-kicker { color: var(--orange); }
+.pbot-card .card-meta span:last-child { color: var(--orange); }
+.pbot-card .card-link:hover { border-color: var(--orange); color: var(--orange); }
+
+.pbot-card-visual {
+  display: grid;
+  min-width: 0;
+  align-items: center;
+}
+
+.pbot-card-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.46);
+}
+
+.pbot-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 26px 0 18px;
+  padding: 0;
+  list-style: none;
+}
+
+.pbot-tags li {
+  padding: 6px 8px;
+  border: 1px solid rgba(224, 75, 63, 0.28);
+  color: #d8b0a8;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pbot-risk {
+  max-width: 540px;
+  color: #827f88 !important;
+  font-size: 0.72rem !important;
+  line-height: 1.55 !important;
+}
 
 .deck-card-visual {
   position: relative;
@@ -831,6 +904,8 @@ h3 {
   .lab-grid { grid-template-columns: 1fr; }
   .deck-card { grid-template-columns: 1fr; }
   .deck-card-visual { width: min(680px, 100%); margin: 0 auto; }
+  .pbot-card { grid-template-columns: 1fr; }
+  .pbot-card-visual { width: min(760px, 100%); margin: 0 auto; }
   .lab-card { min-height: 500px; }
   .streaming-status { margin-bottom: 70px; }
   .site-footer { grid-template-columns: 1fr 1fr; }

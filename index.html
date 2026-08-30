@@ -66,13 +66,18 @@
               <span><strong>Stream Deck Micro</strong><small>Codex under your fingertips</small></span>
               <em>New</em>
             </a>
-            <a class="radar-item" href="https://signals.dionlabs.ai">
+            <a class="radar-item is-experimental" href="#pbot">
               <span class="radar-index">03</span>
+              <span><strong>pbot</strong><small>Local Android automation</small></span>
+              <em>Experimental</em>
+            </a>
+            <a class="radar-item" href="https://signals.dionlabs.ai">
+              <span class="radar-index">04</span>
               <span><strong>Signals</strong><small>Notes from the workbench</small></span>
               <em>Publishing</em>
             </a>
             <a class="radar-item is-paused" href="#streaming">
-              <span class="radar-index">04</span>
+              <span class="radar-index">05</span>
               <span><strong>Streaming systems</strong><small>AI-assisted broadcast tools</small></span>
               <em>Paused</em>
             </a>
@@ -151,8 +156,31 @@
               </div>
             </a>
 
+            <a class="lab-card pbot-card" id="pbot" href="https://github.com/dion-labs/pbot" aria-label="Open pbot on GitHub">
+              <div class="pbot-card-copy">
+                <div class="card-meta"><span>03 / pbot</span><span>Experimental · Local-only</span></div>
+                <div>
+                  <p class="card-kicker">Pocket-sized persistence</p>
+                  <h3>Automate carefully.<br />Recover by design.</h3>
+                  <p>
+                    A local Android automation workbench with guarded actions, durable checkpoints,
+                    and an inspectable control room. Built for one verified setup—and published as a
+                    reference to adapt with a coding agent, not a turnkey bot.
+                  </p>
+                  <ul class="pbot-tags" aria-label="pbot attributes">
+                    <li>Experimental</li><li>Local-first</li><li>Automation</li>
+                  </ul>
+                  <p class="pbot-risk">Unofficial project. Game automation can violate service rules and put an account at risk.</p>
+                </div>
+                <span class="card-link">Explore pbot on GitHub <b aria-hidden="true">↗</b></span>
+              </div>
+              <div class="pbot-card-visual" aria-hidden="true">
+                <img src="/projects/pbot-social-preview.jpg" alt="" width="1280" height="640" loading="lazy" />
+              </div>
+            </a>
+
             <a class="lab-card signals-card" href="https://signals.dionlabs.ai">
-              <div class="card-meta"><span>03 / Signals</span><span>Publishing</span></div>
+              <div class="card-meta"><span>04 / Signals</span><span>Publishing</span></div>
               <div>
                 <p class="card-kicker">Notes from the workbench</p>
                 <h3>Ideas get sharper when they’re written down.</h3>
@@ -162,7 +190,7 @@
             </a>
 
             <article class="lab-card oss-card">
-              <div class="card-meta"><span>04 / Voxta tools</span><span>Open source</span></div>
+              <div class="card-meta"><span>05 / Voxta tools</span><span>Open source</span></div>
               <div>
                 <p class="card-kicker">Reusable infrastructure</p>
                 <h3>The useful pieces leave the monolith.</h3>
@@ -181,7 +209,7 @@
           <div class="streaming-status"><span class="paused-light"></span><span>Paused project / open invitation</span></div>
           <div class="streaming-layout">
             <div>
-              <p class="section-label">05 / Streaming systems</p>
+              <p class="section-label">06 / Streaming systems</p>
               <h2 id="streaming-title">The software still has a pulse.</h2>
             </div>
             <div class="streaming-copy">
@@ -232,12 +260,25 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "DionLabs",
-        "url": "https://dionlabs.ai/",
-        "description": "D's independent software lab for focused tools, open experiments, and field notes from building with AI.",
-        "author": { "@type": "Person", "name": "D" },
-        "sameAs": ["https://github.com/dion-labs"]
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "name": "DionLabs",
+            "url": "https://dionlabs.ai/",
+            "description": "D's independent software lab for focused tools, open experiments, and field notes from building with AI.",
+            "author": { "@type": "Person", "name": "D" },
+            "sameAs": ["https://github.com/dion-labs"]
+          },
+          {
+            "@type": "SoftwareSourceCode",
+            "name": "pbot — Pocket Bot",
+            "description": "An experimental local Android automation workbench with durable progress and guarded, owned-only actions.",
+            "codeRepository": "https://github.com/dion-labs/pbot",
+            "license": "https://github.com/dion-labs/pbot/blob/main/LICENSE",
+            "programmingLanguage": ["Python", "TypeScript"],
+            "author": { "@type": "Organization", "name": "Dion Labs", "url": "https://dionlabs.ai/" }
+          }
+        ]
       }
     </script>
     <script type="module" src="/src/main.ts"></script>
