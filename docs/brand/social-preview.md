@@ -1,0 +1,18 @@
+# DionLabs social sharing preview
+
+Published asset: `public/social/dionlabs-ensemble-2026-09.jpg` (1734 × 907, JPEG).
+
+Created with the built-in ImageGen tool on 2026-09-08 from the approved D/0 and project character artwork. JPEG encoding uses quality 90 with no crop or layout changes. Open Graph and Twitter metadata point to the dated asset URL so it is distinct from the previous preview. The original `public/og.png` remains available for existing links.
+
+## Generation prompt
+
+Use case: ads-marketing.
+Create one polished, intriguing social sharing preview image for the existing DionLabs website. Wide landscape Open Graph composition, approximately 1.91:1 aspect ratio; target 1536x800 pixels. This is a finished promotional image, not a website screenshot.
+References 1-4 are existing brand characters, and reference 5 is a screenshot of the approved homepage cast, whose identities must be preserved. Reference 1 is D/0, the dark sculptural creature with elongated asymmetric ears, luminous mint eyes, ivory gloves and cape lining, and ivory capital D on its chest. Reference 2 is Mux the ivory lynx with teal and orange twin tails. Reference 3 is coral inbox creature Boxie. Reference 4 is Pocket Bot. Reference 5 shows the complete five-project cast, including the short dark-haired narrator holding a red book and the silver-haired curator with luminous control tiles; use their identities from this reference, but do not reproduce the screenshot UI.
+Art direction: premium independent software lab, warm curiosity, mischievous intelligence. Deep midnight charcoal backdrop (#090d12), subtle mint rim lighting and faint elliptical stage lines. Compose a memorable large D/0 on the right, welcoming the viewer, with the five smaller project characters arranged as a cohesive supporting cast along the lower portion / around D/0. Preserve their distinctive original rendering styles and costume details; give each face room. D/0 is clearly the host and strongest character focal point. Avoid crowded confetti or generic AI circuitry. The left upper and central area is clean editorial typography with generous negative space.
+Exact text, all clear and beautifully typeset: small brand wordmark "dionlabs." at upper left; large headline on two lines "Useful things." and "Unusual company." in a bold modern geometric sans-serif, ivory and muted mint. Small "dionlabs.ai" at lower left. These are the only promotional words. The capital D on D/0's chest must remain.
+At thumbnail scale the headline and D/0 must read immediately. Keep all text and key faces inside a generous safe margin of at least 6% from every edge. Make the image inviting and striking, rich material detail, tasteful cinematic soft illumination, calm backdrop, no border, no UI elements, no watermark, no additional characters.
+
+## Final cleanup prompt
+
+Use case: precise-object-edit. Edit this finished DionLabs social preview with ONE localized change only: remove the empty teal circular badge immediately to the left of the small 'dionlabs.' wordmark in the upper-left corner. Fill that small circle region with the same uninterrupted dark background. Move the existing small 'dionlabs.' wordmark horizontally left so its left edge aligns with the main headline and the 'dionlabs.ai' bottom-left text (about x=60 pixels). Preserve the wordmark's exact type, size, spelling, color and height. Keep EVERY other element unchanged: image dimensions and aspect ratio, all six characters, their exact identities and expressions, D/0 pose and letter D, headline lettering, domain, stage, lighting, colors and composition. No new objects or logos.
