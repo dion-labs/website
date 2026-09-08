@@ -468,7 +468,7 @@ h3 {
   gap: 18px;
 }
 
-.deskmux-card {
+.lab-card.deskmux-card {
   grid-column: 1 / -1;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -477,10 +477,11 @@ h3 {
   background: radial-gradient(ellipse at 80% 50%, #174a42, transparent 65%), #101e1a;
 }
 .deskmux-card-copy { display: grid; gap: 28px; }
+.deskmux-card-copy > p { max-width: 540px; color: var(--muted); line-height: 1.65; }
 .deskmux-card .card-meta span:last-child { color: #8fe1cf; }
 .deskmux-card img { width: 100%; height: auto; filter: drop-shadow(0 25px 35px #0005); }
 @media (max-width: 700px) {
-  .deskmux-card { grid-template-columns: 1fr; }
+  .lab-card.deskmux-card { grid-template-columns: 1fr; }
   .deskmux-card img { width: min(360px, 100%); justify-self: center; }
 }
 
