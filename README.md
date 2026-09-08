@@ -4,7 +4,9 @@ The source for [dionlabs.ai](https://dionlabs.ai), D's personal software-lab por
 
 ## Current state
 
-The original AI streaming landing page has been replaced by a static portfolio for active, incubating, paused, and open-source DionLabs projects. The site is built with Vite and emits fully crawlable HTML and assets to `dist/`.
+The homepage presents DionLabs as an independent software lab, hosted by D/0 and the characters from its five featured projects. The site is built with Vite and emits fully crawlable HTML and assets to `dist/`. Content and navigation work without JavaScript; the small script adds optional motion controls and a subtle pointer response.
+
+The approved Ensemble design is the production homepage. Local design studies in `design-lab/` are excluded from version control and deployment. Fonts and approved character artwork are served locally from `public/fonts/`, `public/characters/`, and `public/brand/characters/`; font licenses accompany the font files. The footer provides a motion toggle, and the site respects the system's reduced-motion preference.
 
 The previous homepage was manually uploaded. Its source remains in the streaming monolith as historical context while this repository becomes the canonical source for `dionlabs.ai`.
 

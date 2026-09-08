@@ -1,28 +1,55 @@
 import "./styles.css";
 
-document.documentElement.classList.add("has-js");
-
-const year = new Date().getFullYear().toString();
 document.querySelectorAll<HTMLElement>("[data-year]").forEach((element) => {
-  element.textContent = year;
+  element.textContent = new Date().getFullYear().toString();
 });
 
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const revealItems = document.querySelectorAll<HTMLElement>(".reveal");
+const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+let paused = motionQuery.matches;
+try {
+  paused ||= sessionStorage.getItem("dion-motion-paused") === "true";
+} catch {
+  // Motion controls still work when browser storage is unavailable.
+}
 
-if (reducedMotion || !("IntersectionObserver" in window)) {
-  revealItems.forEach((item) => item.classList.add("is-visible"));
-} else {
-  const revealObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("is-visible");
-        observer.unobserve(entry.target);
-      });
-    },
-    { rootMargin: "0px 0px -8%", threshold: 0.12 },
+const motionButton =
+  document.querySelector<HTMLButtonElement>(".motion-toggle");
+function applyMotion() {
+  document.body.classList.toggle("motion-paused", paused);
+  if (!motionButton) return;
+  motionButton.setAttribute("aria-pressed", String(paused));
+  motionButton.innerHTML = `${paused ? "Resume motion" : "Pause motion"} <span aria-hidden="true">${paused ? "▷" : "Ⅱ"}</span>`;
+}
+applyMotion();
+if (motionButton) {
+  motionButton.hidden = false;
+  motionButton.addEventListener("click", () => {
+    paused = !paused;
+    applyMotion();
+    try {
+      sessionStorage.setItem("dion-motion-paused", String(paused));
+    } catch {
+      // Keep the control usable without persistence.
+    }
+  });
+}
+motionQuery.addEventListener("change", (event) => {
+  paused = event.matches;
+  applyMotion();
+});
+
+// The cast responds gently to a mouse; navigation also works by touch or keyboard.
+const stage = document.querySelector<HTMLElement>(".ensemble-stage");
+if (stage && window.matchMedia("(pointer: fine)").matches) {
+  stage.addEventListener("pointermove", (event) => {
+    if (paused || motionQuery.matches) return;
+    const rect = stage.getBoundingClientRect();
+    stage.style.setProperty(
+      "--pointer-x",
+      `${((event.clientX - rect.left) / rect.width - 0.5) * 12}px`,
+    );
+  });
+  stage.addEventListener("pointerleave", () =>
+    stage.style.setProperty("--pointer-x", "0px"),
   );
-
-  revealItems.forEach((item) => revealObserver.observe(item));
 }
