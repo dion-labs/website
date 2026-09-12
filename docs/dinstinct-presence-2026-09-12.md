@@ -4,4 +4,4 @@ Adds The Rookie as a lab contributor outside the five numbered projects. Uses th
 
 Build and Chromium checks passed at 1440, 390, and 320 pixels: no overflow, broken images, invalid fragment links, or runtime errors. Desktop/mobile presentation inspected. Existing unrelated untracked brand assets excluded.
 
-Dinstinct QA and Davide review remain pending; Bluesky requires separate approval.
+Dinstinct QA and D review remain pending; Bluesky requires separate approval.
