@@ -1580,3 +1580,5 @@ html {
 .lab-crew{display:grid;grid-template-columns:260px 1fr;align-items:center;gap:60px;margin-top:80px;padding:32px;border:1px solid var(--line);background:#0e141b}.rookie-portrait img{width:100%;border-radius:4px}.rookie-copy h2{font-size:44px;line-height:1.15;margin:16px 0}.rookie-copy>p{max-width:560px}.rookie-links{display:flex;gap:30px;flex-wrap:wrap;margin-top:12px}.rookie-copy .eyebrow{font-size:12px;color:var(--accent)}
 @media(max-width:850px){.lab-crew{grid-template-columns:180px 1fr;gap:28px}.rookie-copy h2{font-size:36px}}
 @media(max-width:600px){.lab-crew{grid-template-columns:1fr;padding:24px;gap:24px;margin-top:50px}.rookie-portrait{max-width:250px;width:100%;margin-inline:auto}.rookie-copy h2{font-size:34px}.rookie-links{gap:24px}}
+
+.instinct-credit{margin-top:18px;font-size:14px;line-height:1.7;color:var(--muted)}.instinct-credit a,.inline-credit{color:var(--accent);text-decoration:underline;text-underline-offset:4px}.instinct-credit a:hover,.inline-credit:hover{color:var(--text,#f1f3f4)}
